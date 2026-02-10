@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "HU (Handling Unit) Management System for warehousing/logistics to generate and track Gate Passes (GPs) for HU movements between DCs and stores, support receiving and security confirmations, handle mismatches via exception reporting, maintain inventory for reusable HUs (crates and shipper boxes) across locations (DC/store/in-transit), support stock take/reconciliation with variance reasons, provide audit trails, and deliver operational/reconciliation/shrinkage reports with exports.",
+  "architectural_notes": [
+    "System tracks HU movements via Gate Passes; receiving location confirms HU quantities by type; DC security confirms returned crates and shipper boxes.",
+    "Inventory (On Hand) is maintained only for Crates and Shipper Boxes across DC/Store/In-Transit; cartons/bags/others are not inventory-tracked.",
+    "GP creation is allowed even if it results in negative OH; system must show warning and require user confirmation when OH goes negative.",
+    "System must maintain complete audit trail for all GP-related transactions and exception logs for Loss Prevention review.",
+    "Reports include location-wise OH, in-transit, mismatch/exception (by date range/location/HU type), shrinkage, and GP-wise reconciliation with Excel/PDF export."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-produce-ui-wireframes-text-based-for-key-screens-and-role-based-navigation-login-role-selection-location-context-gate-pass-creation-form-with-hu-quantity-inputs-and-auto-total-gp-detail-view-pending-gp-list-for-receiving-location-sorted-ascending-gp-number-with-receive-confirm-flow-dc-security-confirmation-screen-crate-shipper-box-only-inventory-dashboard-crate-shipper-box-oh-in-transit-exception-mismatch-report-screen-filters-location-date-range-show-hu-wise-variance-stock-take-screen-create-session-enter-physical-counts-variance-reasons-submit-approve-reconciliation-report-screen-date-range-location-gp-wise-output-and-audit-trail-viewer-filters-event-list",
+      "title": "Produce UI wireframes (text-based) for key screens and role-based navigation: Login/Role selection + location context, Gate Pass creation form (with HU quantity inputs and auto total), GP detail view, Pending GP list for receiving location (sorted ascending GP number) with receive-confirm flow, DC Security confirmation screen (Crate + Shipper Box only), Inventory dashboard (Crate/Shipper Box OH + in-transit), Exception/Mismatch report screen (filters: location, date range; show HU-wise variance), Stock take screen (create session, enter physical counts, variance reasons, submit/approve), Reconciliation report screen (date range, location; GP-wise output), and Audit trail viewer (filters, event list).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-a-full-project-structure-for-development-aligned-to-the-single-actor-motoko-backend-and-react-typescript-frontend-including-suggested-folders-modules-for-backend-domain-types-storage-services-workflows-authorization-reporting-audit-logging-frontend-pages-components-hooks-api-client-actor-wrapper-state-query-keys-and-shared-types-the-structure-must-respect-that-certain-frontend-paths-are-immutable-and-must-not-be-modified",
+      "title": "Provide a full project structure for development aligned to the single-actor Motoko backend and React+TypeScript frontend, including suggested folders/modules for: backend domain types, storage, services/workflows, authorization, reporting, audit logging; frontend pages, components, hooks, API client/actor wrapper, state/query keys, and shared types. The structure must respect that certain frontend paths are immutable and must not be modified.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-write-user-stories-with-acceptance-criteria-for-the-core-workflows-gp-generation-deo-pending-gp-visibility-receiver-receiving-confirmation-receiver-dc-main-gate-security-confirmation-security-exception-handling-and-mismatch-reporting-lp-audit-inventory-oh-and-in-transit-visibility-operations-stock-take-and-reconciliation-with-variance-reasons-inventory-controller-shrinkage-reporting-lp-operations-gp-wise-reconciliation-reporting-with-export-operations-and-audit-trail-completeness-admin-lp",
+      "title": "Write user stories with acceptance criteria for the core workflows: GP generation (DEO), pending GP visibility (receiver), receiving confirmation (receiver), DC main gate security confirmation (security), exception handling and mismatch reporting (LP/audit), inventory OH and in-transit visibility (operations), stock take and reconciliation with variance reasons (inventory controller), shrinkage reporting (LP/operations), GP-wise reconciliation reporting with export (operations), and audit trail completeness (admin/LP).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-distinct-visual-theme-across-the-frontend-colors-typography-layout-appropriate-for-an-enterprise-warehouse-logistics-tool-ensuring-consistent-styling-for-forms-tables-status-badges-and-filter-panels-avoid-blue-purple-as-primary-colors",
+      "title": "Apply a coherent, distinct visual theme across the frontend (colors, typography, layout) appropriate for an enterprise warehouse/logistics tool, ensuring consistent styling for forms, tables, status badges, and filter panels. Avoid blue & purple as primary colors.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create a clean, simple database schema for the HU Management System (entities for HU types, gate passes, locations, inventory, confirmations, stock takes, exceptions, audit logs, users/roles)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Define an API design for the HU Management System (endpoints for GP creation/visibility/confirmation, security confirmation, inventory queries/updates, exception reports, stock take, exports, auth/roles)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Produce UI wireframes for key roles and modules (GP creation, pending GP list, receiving confirmation, security confirmation, inventory dashboards, reconciliation/stock take, exception reports, audit view)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Propose a full project structure for development (recommended tech-agnostic folder/module layout for backend, frontend, shared models, tests, CI/CD)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Write user stories and acceptance criteria for core workflows (dispatch, receiving, security confirmation, inventory, reconciliation/stock take, exception handling, reporting/export, audit trail)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Define a clean, simple persistent data schema for the HU Management System in Motoko terms (stable types/records and storage collections), covering: users + roles, locations (DC/Store/Other), HU types, Gate Pass (GP) header, GP line quantities by HU type, receiving confirmation, DC main-gate security confirmation, inventory on-hand for Crates and Shipper Boxes (by location and status: OnHand/InTransit), stock take sessions + variance reason codes, exception/mismatch records, and audit trail events.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Design the backend API (Motoko actor interface) for core workflows: authentication/identity mapping, location-based login context, GP creation with system-generated GP number and system date, listing pending GPs for a receiving location ordered by ascending GP number, receiving confirmation HU-type-wise, DC main-gate security confirmation for Crates and Shipper Boxes, inventory queries (location-wise OH + in-transit) for Crates and Shipper Boxes, stock take creation/submit/approve with variance reason codes, exception report generation (location-wise, date range, HU-wise variance), reconciliation reports (GP-wise/date-wise), and exporting report data as downloadable content (at minimum provide structured data suitable for CSV/XLSX/PDF generation on the client).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "HU Management System",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

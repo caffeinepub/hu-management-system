@@ -1,0 +1,118 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-10T07:13:50.718Z",
+  "summary": "Diff implements only a small subset of the requested HU Management System: a minimal backend with user profile/role assignment APIs (non-stable in-memory Map) plus frontend scaffolding for login/profile setup, constants, query keys, and CSV export utilities. Core HU domain schema, stable persistence, workflow APIs (Gate Pass/Receiving/Security/Inventory/Stock take/Reports/Audit), wireframes, and user stories are not implemented in the provided diff summary.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Define a persistent Motoko schema (stable types + stable storage) covering User/Role/Location/HUType/GatePass(+lines)/ReceivingConfirmation/SecurityConfirmation/InventoryBalance (Crate/ShipperBox only)/StockTake(+lines + reason codes)/ExceptionRecord/AuditEvent with relationships, timestamps, GP statuses, and dispatched vs received quantities.",
+      "reason": "backend/main.mo defines some types (Location, GatePass, ReceivingConfirmation, InventoryItem, StockTake, ExceptionRecord, UserProfile/AppRole) but does not define required entities (Role, HUType beyond crate/shipperBox/carton/bag/other, GatePassLine, SecurityConfirmation, InventoryBalance with quantity, StockTakeLine with reason codes, AuditEvent), does not capture dispatched vs received quantities per HU type, and does not show stable persistence (no stable vars or upgrade hooks; uses in-memory Map).",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Design/implement backend actor API for core workflows including createGatePass/getGatePassById/Number/listPendingGatePasses(confirm sorted by ascending GP number)/confirmReceipt/confirmSecurityReturn/getInventory/getInTransitSummary/createStockTake/submitStockTake/approveStockTake/getExceptionReport/getReconciliationReport/getAuditTrail, with typed validation/auth errors, role-based access, validations, and negative-inventory warning confirmation step.",
+      "reason": "backend/main.mo exposes only profile-related methods (getCallerUserProfile, getUserProfile, saveCallerUserProfile, assignUserProfile). Frontend placeholders explicitly throw 'Not yet implemented in backend' for nearly all required workflow APIs. No evidence of GP number generation, pending list sorting, inventory negative warning two-step flow, or report endpoints.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/api/actorClient.ts",
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Provide text-based UI wireframes for all key role-based screens (login/location context, GP create/detail, pending receive list sorted by GP number, security confirmation for crates/shipper boxes, inventory dashboard, exception/mismatch reports, stock take flows, reconciliation report, audit viewer) including negative inventory warning UX.",
+      "reason": "No wireframe documents are present in the diff summary; added UI code does not constitute the requested text-based wireframes and does not show the full set of required screens/flows.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "frontend/src/features/README.md"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Provide full project structure documentation aligned to single-actor backend with suggested backend modules (types/storage/services/auth/reporting/audit) and frontend modules (pages/components/hooks/api/state/shared types), explicitly noting immutable frontend paths and composition approach.",
+      "reason": "Only partial structure is present (some constants, utils, hooks, and a feature README). There is no clear backend module layout under backend/ (other than main.mo referencing authorization modules not shown), and no documentation explicitly noting immutable frontend paths or how to compose without editing them.",
+      "evidence": [
+        "frontend/src/features/README.md",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Write user stories with given/when/then acceptance criteria covering all core workflows and business rules (mandatory GP, pending list ordering, inventory only for crates/shipper boxes, security confirmation required for DC returns, mismatches create exceptions, negative inventory confirmation step, role permissions, reporting filters/columns).",
+      "reason": "No user stories file/content appears in the diff summary.",
+      "evidence": [
+        "frontend/src/features/README.md"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Apply a coherent enterprise visual theme across the frontend (not blue/purple primary), consistently styling forms/tables/status badges/filter panels.",
+      "reason": "A theme is started in frontend/src/index.css (charcoal/amber), and StatusBadge exists, but there is no evidence of applying consistent styling across the required screens (most screens are not implemented/shown; tables/filter panels not evidenced).",
+      "evidence": [
+        "frontend/src/index.css",
+        "frontend/src/components/StatusBadge.tsx",
+        "frontend/src/App.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Added a HUType variant '#pallet' in the backend type definition.",
+      "reason": "BuildRequest only required HU types including Crate/Shipper Box and explicitly mentioned Carton/Bag/Others as non-inventory-tracked; 'pallet' was not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Introduced an admin secret token initialization flow ('caffeineAdminToken') and a backend method call '_initializeAccessControlWithSecret' from the frontend actor hook.",
+      "reason": "BuildRequest did not request an admin-token bootstrapping mechanism via URL parameters; it only constrained auth to Internet Identity and single-actor backend.",
+      "evidence": [
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/utils/urlParams.ts"
+      ]
+    },
+    {
+      "description": "Added marketing/branding footer link to caffeine.ai in the login screen UI.",
+      "reason": "Not requested as part of HU Management System requirements; could be considered extraneous user-facing content.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/docs/api-design.md",
+    "frontend/docs/database-schema.md",
+    "frontend/docs/project-structure.md",
+    "frontend/docs/ui-wireframes.md",
+    "frontend/docs/user-stories.md",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/api/actorClient.ts",
+    "frontend/src/components/ProfileSetup.tsx",
+    "frontend/src/components/StatusBadge.tsx",
+    "frontend/src/features/README.md",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/shared/constants/hu.ts",
+    "frontend/src/shared/constants/roles.ts",
+    "frontend/src/shared/constants/status.ts",
+    "frontend/src/shared/queryKeys.ts",
+    "frontend/src/shared/types/domain.ts",
+    "frontend/src/utils/exporters.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.5rem;
+        
+        /* Warehouse/Logistics Theme - Charcoal & Amber Accents */
+        /* Light Mode */
+        --background: 0.98 0 0;                    /* Off-white */
+        --foreground: 0.25 0.01 270;               /* Charcoal */
+        
+        --card: 1 0 0;                             /* White */
+        --card-foreground: 0.25 0.01 270;
+        
+        --popover: 1 0 0;
+        --popover-foreground: 0.25 0.01 270;
+        
+        --primary: 0.35 0.02 270;                  /* Dark Charcoal */
+        --primary-foreground: 0.98 0 0;
+        
+        --secondary: 0.92 0.005 270;               /* Light Gray */
+        --secondary-foreground: 0.25 0.01 270;
+        
+        --muted: 0.95 0.005 270;                   /* Muted Gray */
+        --muted-foreground: 0.50 0.01 270;
+        
+        --accent: 0.70 0.15 60;                    /* Amber Accent */
+        --accent-foreground: 0.15 0.01 270;
+        
+        --destructive: 0.55 0.22 25;               /* Red */
+        --destructive-foreground: 0.98 0 0;
+        
+        --border: 0.88 0.005 270;
+        --input: 0.88 0.005 270;
+        --ring: 0.70 0.15 60;
+        
+        --chart-1: 0.70 0.15 60;                   /* Amber */
+        --chart-2: 0.60 0.12 150;                  /* Teal */
+        --chart-3: 0.50 0.10 270;                  /* Slate */
+        --chart-4: 0.65 0.18 40;                   /* Orange */
+        --chart-5: 0.55 0.14 120;                  /* Green */
+        
+        --sidebar: 0.98 0 0;
+        --sidebar-foreground: 0.25 0.01 270;
+        --sidebar-primary: 0.35 0.02 270;
+        --sidebar-primary-foreground: 0.98 0 0;
+        --sidebar-accent: 0.92 0.005 270;
+        --sidebar-accent-foreground: 0.25 0.01 270;
+        --sidebar-border: 0.88 0.005 270;
+        --sidebar-ring: 0.70 0.15 60;
+    }
+
+    .dark {
+        /* Dark Mode */
+        --background: 0.18 0.01 270;               /* Dark Charcoal */
+        --foreground: 0.95 0.005 270;              /* Light Gray */
+        
+        --card: 0.22 0.01 270;                     /* Slightly Lighter Charcoal */
+        --card-foreground: 0.95 0.005 270;
+        
+        --popover: 0.25 0.01 270;
+        --popover-foreground: 0.95 0.005 270;
+        
+        --primary: 0.70 0.15 60;                   /* Amber Accent */
+        --primary-foreground: 0.15 0.01 270;
+        
+        --secondary: 0.28 0.01 270;                /* Medium Charcoal */
+        --secondary-foreground: 0.95 0.005 270;
+        
+        --muted: 0.30 0.01 270;
+        --muted-foreground: 0.65 0.01 270;
+        
+        --accent: 0.70 0.15 60;                    /* Amber Accent */
+        --accent-foreground: 0.15 0.01 270;
+        
+        --destructive: 0.60 0.22 25;               /* Brighter Red */
+        --destructive-foreground: 0.95 0.005 270;
+        
+        --border: 0.32 0.01 270;
+        --input: 0.32 0.01 270;
+        --ring: 0.70 0.15 60;
+        
+        --chart-1: 0.70 0.15 60;
+        --chart-2: 0.60 0.12 150;
+        --chart-3: 0.50 0.10 270;
+        --chart-4: 0.65 0.18 40;
+        --chart-5: 0.55 0.14 120;
+        
+        --sidebar: 0.22 0.01 270;
+        --sidebar-foreground: 0.95 0.005 270;
+        --sidebar-primary: 0.70 0.15 60;
+        --sidebar-primary-foreground: 0.15 0.01 270;
+        --sidebar-accent: 0.28 0.01 270;
+        --sidebar-accent-foreground: 0.95 0.005 270;
+        --sidebar-border: 0.32 0.01 270;
+        --sidebar-ring: 0.70 0.15 60;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "rlig" 1, "calt" 1;
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-semibold tracking-tight;
+    }
+    
+    h1 {
+        @apply text-3xl;
+    }
+    
+    h2 {
+        @apply text-2xl;
+    }
+    
+    h3 {
+        @apply text-xl;
+    }
+    
+    /* Operational Scanning Patterns */
+    .status-badge {
+        @apply inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-medium;
+    }
+    
+    .data-table {
+        @apply w-full border-collapse;
+    }
+    
+    .data-table th {
+        @apply bg-muted/50 px-4 py-3 text-left text-sm font-semibold;
+    }
+    
+    .data-table td {
+        @apply border-t px-4 py-3 text-sm;
+    }
+    
+    .data-table tr:hover {
+        @apply bg-muted/30;
+    }
+    
+    /* Filter Panel */
+    .filter-panel {
+        @apply rounded-lg border bg-card p-4 shadow-sm;
+    }
+    
+    /* Form Styles */
+    .form-section {
+        @apply space-y-4 rounded-lg border bg-card p-6;
+    }
+    
+    .form-label {
+        @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+    }
+    
+    /* Negative Inventory Warning */
+    .negative-inventory {
+        @apply text-destructive font-semibold;
+    }
+    
+    /* Loading States */
+    .skeleton {
+        @apply animate-pulse rounded-md bg-muted;
+    }
+}

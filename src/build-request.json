@@ -1,0 +1,138 @@
+{
+  "kind": "build_request",
+  "title": "HU (Handling Unit) Management System — schema, API, wireframes, structure, and user stories",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Define a clean, simple persistent data schema for the HU Management System in Motoko terms (stable types/records and storage collections), covering: users + roles, locations (DC/Store/Other), HU types, Gate Pass (GP) header, GP line quantities by HU type, receiving confirmation, DC main-gate security confirmation, inventory on-hand for Crates and Shipper Boxes (by location and status: OnHand/InTransit), stock take sessions + variance reason codes, exception/mismatch records, and audit trail events.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Yes please continue and now generate: • Database schema (clean and simple)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Schema includes explicit entities/records for: User, Role, Location, HUType, GatePass, GatePassLine (or equivalent HU-quantity breakdown), ReceivingConfirmation, SecurityConfirmation, InventoryBalance (Crate/ShipperBox only), StockTake, StockTakeLine (with reason code), ExceptionRecord, AuditEvent.",
+        "Schema documents the minimal required fields for each entity, including unique identifiers and timestamps.",
+        "Schema documents key relationships (e.g., GatePass -> FromLocation/ToLocation, GatePass -> createdBy User, GatePass -> confirmation records, StockTake -> Location, InventoryBalance -> Location + HUType).",
+        "Schema explicitly enforces/notes the rule: inventory is maintained only for Crates and Shipper Boxes; Carton/Bag/Others are not inventory-tracked.",
+        "Schema supports GP status transitions needed for workflows (e.g., Created/PendingReceipt/Received/Closed or equivalent), including capturing dispatched vs received quantities per HU type."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Design the backend API (Motoko actor interface) for core workflows: authentication/identity mapping, location-based login context, GP creation with system-generated GP number and system date, listing pending GPs for a receiving location ordered by ascending GP number, receiving confirmation HU-type-wise, DC main-gate security confirmation for Crates and Shipper Boxes, inventory queries (location-wise OH + in-transit) for Crates and Shipper Boxes, stock take creation/submit/approve with variance reason codes, exception report generation (location-wise, date range, HU-wise variance), reconciliation reports (GP-wise/date-wise), and exporting report data as downloadable content (at minimum provide structured data suitable for CSV/XLSX/PDF generation on the client).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Yes please continue and now generate: • API design"
+        ]
+      },
+      "acceptanceCriteria": [
+        "API includes method signatures for: createGatePass, getGatePassById/Number, listPendingGatePasses(locationId), confirmReceipt(gpId, receivedQuantitiesByHUType), confirmSecurityReturn(gpId, crateQty, shipperBoxQty), getInventory(locationId), getInTransitSummary(filters), createStockTake(locationId), submitStockTake(stockTakeId, linesWithReasons), approveStockTake(stockTakeId), getExceptionReport(filters), getReconciliationReport(filters), getAuditTrail(filters).",
+        "API design specifies request/response types including validation errors and authorization errors.",
+        "API design includes role-based access rules per method (DEO, Receiver, DC Security, Inventory Controller, Admin).",
+        "API design includes required validations: total HU quantity auto-calculated, GP number uniqueness, chronological sorting by ascending GP number for pending lists.",
+        "API design explicitly includes the control: GP creation is allowed even if inventory becomes negative; for negative inventory scenarios, API returns a warning flag/message that the UI must present for user confirmation before finalizing (two-step create/confirm or equivalent)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Produce UI wireframes (text-based) for key screens and role-based navigation: Login/Role selection + location context, Gate Pass creation form (with HU quantity inputs and auto total), GP detail view, Pending GP list for receiving location (sorted ascending GP number) with receive-confirm flow, DC Security confirmation screen (Crate + Shipper Box only), Inventory dashboard (Crate/Shipper Box OH + in-transit), Exception/Mismatch report screen (filters: location, date range; show HU-wise variance), Stock take screen (create session, enter physical counts, variance reasons, submit/approve), Reconciliation report screen (date range, location; GP-wise output), and Audit trail viewer (filters, event list).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Yes please continue and now generate: • UI wireframes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Wireframes include a primary navigation model that changes available modules based on role (DEO, Receiver, DC Security, Inventory Controller, Admin).",
+        "Gate Pass creation wireframe includes fields: GP Date (system date/read-only), From Location, To Location, Shipping/Loading/Serial reference, HU quantities by type, Total HU quantity (system-calculated), and submit action.",
+        "Pending GP list wireframe shows chronological ordering by ascending GP number and supports opening a GP to confirm received HU quantities by type.",
+        "Security confirmation wireframe restricts entry to Crates and Shipper Boxes quantities only and records confirmation.",
+        "Inventory dashboard wireframe shows location-wise OH for Crates and Shipper Boxes and an In-Transit view.",
+        "Report wireframes include filter panels and tabular results matching the requirements (GP-wise and exception/shrinkage outputs).",
+        "Wireframes include the negative inventory warning/confirmation UX for GP creation when applicable."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Provide a full project structure for development aligned to the single-actor Motoko backend and React+TypeScript frontend, including suggested folders/modules for: backend domain types, storage, services/workflows, authorization, reporting, audit logging; frontend pages, components, hooks, API client/actor wrapper, state/query keys, and shared types. The structure must respect that certain frontend paths are immutable and must not be modified.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Yes please continue and now generate: • Full project structure for development"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Project structure includes a clear backend module layout under backend/ while still compiling into a single main actor (no multi-canister or multi-service design).",
+        "Project structure includes a clear frontend layout under frontend/src/ with separation of pages, feature modules, shared components, and API/actor integration.",
+        "Documentation explicitly notes immutable frontend paths that must not be edited and indicates how the app will compose UI components without modifying those files.",
+        "Structure includes a place for constants/enums (HU types, roles, statuses), and a place for report-building utilities on both backend (data shaping) and frontend (export formatting)."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Write user stories with acceptance criteria for the core workflows: GP generation (DEO), pending GP visibility (receiver), receiving confirmation (receiver), DC main gate security confirmation (security), exception handling and mismatch reporting (LP/audit), inventory OH and in-transit visibility (operations), stock take and reconciliation with variance reasons (inventory controller), shrinkage reporting (LP/operations), GP-wise reconciliation reporting with export (operations), and audit trail completeness (admin/LP).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Yes please continue and now generate: • User stories / acceptance criteria"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each core module has at least 1 user story and includes clear given/when/then style acceptance criteria.",
+        "Stories explicitly cover the business rules: mandatory GP for all HU movements; pending list ordering by ascending GP number; inventory only for Crates/Shipper Boxes; security confirmation mandatory for all DC locations for returned crates/shipper boxes; mismatches generate exception records; GP creation allowed even if OH becomes negative with a required user confirmation step.",
+        "Stories include role-based permissions/visibility expectations (who can create/confirm/view/approve/export).",
+        "Stories include reporting filters (location and date range) and required columns/fields in outputs (as specified in the requirements)."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Apply a coherent, distinct visual theme across the frontend (colors, typography, layout) appropriate for an enterprise warehouse/logistics tool, ensuring consistent styling for forms, tables, status badges, and filter panels. Avoid blue & purple as primary colors.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A single visual theme is defined (palette, typography scale, spacing, component styling) and applied consistently across all wireframed screens.",
+        "Tables and status badges have clear visual hierarchy for operational scanning (e.g., pending vs confirmed vs exception).",
+        "Primary colors do not rely on blue/purple as the main brand accents."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single-actor Motoko canister; all Motoko logic lives in backend/main.mo (no multi-service architecture).",
+    "Do not modify immutable frontend paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui (compose them instead).",
+    "No external databases; persistence must use canister stable storage/data structures.",
+    "Authentication must use Internet Identity only (no third-party auth).",
+    "User-facing text must be in English."
+  ],
+  "nonGoals": [
+    "Implementing real-time communication (WebSockets) or push notifications.",
+    "Integrating external BI tools, email/SMS services, or third-party social/media APIs.",
+    "Guaranteeing true Excel/PDF binary generation on the backend; backend should at minimum provide structured report data suitable for client-side export formatting."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

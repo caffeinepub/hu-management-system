@@ -1,0 +1,94 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-produce-ui-wireframes-text-based-for-key-screens-and-role-based-navigation-login-role-selection-location-context-gate-pass-creation-form-with-hu-quantity-inputs-and-auto-total-gp-detail-view-pending-gp-list-for-receiving-location-sorted-ascending-gp-number-with-receive-confirm-flow-dc-security-confirmation-screen-crate-shipper-box-only-inventory-dashboard-crate-shipper-box-oh-in-transit-exception-mismatch-report-screen-filters-location-date-range-show-hu-wise-variance-stock-take-screen-create-session-enter-physical-counts-variance-reasons-submit-approve-reconciliation-report-screen-date-range-location-gp-wise-output-and-audit-trail-viewer-filters-event-list",
+      "featureTitle": "Produce UI wireframes (text-based) for key screens and role-based navigation: Login/Role selection + location context, Gate Pass creation form (with HU quantity inputs and auto total), GP detail view, Pending GP list for receiving location (sorted ascending GP number) with receive-confirm flow, DC Security confirmation screen (Crate + Shipper Box only), Inventory dashboard (Crate/Shipper Box OH + in-transit), Exception/Mismatch report screen (filters: location, date range; show HU-wise variance), Stock take screen (create session, enter physical counts, variance reasons, submit/approve), Reconciliation report screen (date range, location; GP-wise output), and Audit trail viewer (filters, event list).",
+      "files": [
+        "frontend/docs/ui-wireframes.md",
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-provide-a-full-project-structure-for-development-aligned-to-the-single-actor-motoko-backend-and-react-typescript-frontend-including-suggested-folders-modules-for-backend-domain-types-storage-services-workflows-authorization-reporting-audit-logging-frontend-pages-components-hooks-api-client-actor-wrapper-state-query-keys-and-shared-types-the-structure-must-respect-that-certain-frontend-paths-are-immutable-and-must-not-be-modified",
+      "featureTitle": "Provide a full project structure for development aligned to the single-actor Motoko backend and React+TypeScript frontend, including suggested folders/modules for: backend domain types, storage, services/workflows, authorization, reporting, audit logging; frontend pages, components, hooks, API client/actor wrapper, state/query keys, and shared types. The structure must respect that certain frontend paths are immutable and must not be modified.",
+      "files": [
+        "frontend/docs/project-structure.md",
+        "frontend/src/api/actorClient.ts",
+        "frontend/src/features/README.md",
+        "frontend/src/shared/constants/hu.ts",
+        "frontend/src/shared/constants/roles.ts",
+        "frontend/src/shared/constants/status.ts",
+        "frontend/src/shared/queryKeys.ts",
+        "frontend/src/shared/types/domain.ts",
+        "frontend/src/utils/exporters.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-write-user-stories-with-acceptance-criteria-for-the-core-workflows-gp-generation-deo-pending-gp-visibility-receiver-receiving-confirmation-receiver-dc-main-gate-security-confirmation-security-exception-handling-and-mismatch-reporting-lp-audit-inventory-oh-and-in-transit-visibility-operations-stock-take-and-reconciliation-with-variance-reasons-inventory-controller-shrinkage-reporting-lp-operations-gp-wise-reconciliation-reporting-with-export-operations-and-audit-trail-completeness-admin-lp",
+      "featureTitle": "Write user stories with acceptance criteria for the core workflows: GP generation (DEO), pending GP visibility (receiver), receiving confirmation (receiver), DC main gate security confirmation (security), exception handling and mismatch reporting (LP/audit), inventory OH and in-transit visibility (operations), stock take and reconciliation with variance reasons (inventory controller), shrinkage reporting (LP/operations), GP-wise reconciliation reporting with export (operations), and audit trail completeness (admin/LP).",
+      "files": [
+        "frontend/docs/user-stories.md",
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-coherent-distinct-visual-theme-across-the-frontend-colors-typography-layout-appropriate-for-an-enterprise-warehouse-logistics-tool-ensuring-consistent-styling-for-forms-tables-status-badges-and-filter-panels-avoid-blue-purple-as-primary-colors",
+      "featureTitle": "Apply a coherent, distinct visual theme across the frontend (colors, typography, layout) appropriate for an enterprise warehouse/logistics tool, ensuring consistent styling for forms, tables, status badges, and filter panels. Avoid blue & purple as primary colors.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/StatusBadge.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

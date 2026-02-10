@@ -1,0 +1,166 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "HU Management System — Frontend UI wireframes, structure, user stories, and enterprise theme",
+  "requirements": [
+    {
+      "id": "REQ-3",
+      "summary": "Add text-based UI wireframes for key screens and role-based navigation (including negative-inventory warning UX).",
+      "acceptanceCriteria": [
+        "Wireframes include a primary navigation model that changes available modules based on role (DEO, Receiver, DC Security, Inventory Controller, Admin).",
+        "Gate Pass creation wireframe includes fields: GP Date (system date/read-only), From Location, To Location, Shipping/Loading/Serial reference, HU quantities by type, Total HU quantity (system-calculated), and submit action.",
+        "Pending GP list wireframe shows chronological ordering by ascending GP number and supports opening a GP to confirm received HU quantities by type.",
+        "Security confirmation wireframe restricts entry to Crates and Shipper Boxes quantities only and records confirmation.",
+        "Inventory dashboard wireframe shows location-wise OH for Crates and Shipper Boxes and an In-Transit view.",
+        "Report wireframes include filter panels and tabular results matching the requirements (GP-wise and exception/shrinkage outputs).",
+        "Wireframes include the negative inventory warning/confirmation UX for GP creation when applicable."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/docs/ui-wireframes.md",
+          "operation": "create",
+          "description": "Create text-based wireframes for: login/profile setup + role selection + location context, GP create, GP detail, pending GP list + receive-confirm flow, security confirmation (Crate/Shipper Box only), inventory dashboard (OH + in-transit), exception/mismatch report, stock take (create/submit/approve with reason codes), reconciliation report, and audit trail viewer. Include role-based navigation matrix and explicit negative-inventory warning/confirmation UX. Use shadcn-ui components (compose from frontend/src/components/ui) to describe consistent UI building blocks; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the application shell that wires navigation to the required screens (router + top-level layout). Ensure role-based navigation is enforced at the UI level (only show permitted modules per role) and that unauthenticated users see only the login flow using the existing authorization hooks (do not modify immutable auth hook files). Use shadcn-ui layout primitives (e.g., Card, Button, Tabs, Sheet/Drawer, NavigationMenu) by composing components from frontend/src/components/ui; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/Wireframes.tsx",
+          "operation": "create",
+          "description": "Add a developer-facing page that renders or links to the wireframes markdown for quick review during implementation (no new user-facing module beyond what is needed for development). Use shadcn-ui components for layout/typography by composing frontend/src/components/ui; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Establish a frontend project structure aligned to React+TypeScript with pages, components, hooks, actor wrapper, query keys, and shared types, while respecting immutable paths.",
+      "acceptanceCriteria": [
+        "Project structure includes a clear frontend layout under frontend/src/ with separation of pages, feature modules, shared components, and API/actor integration.",
+        "Documentation explicitly notes immutable frontend paths that must not be edited and indicates how the app will compose UI components without modifying those files.",
+        "Structure includes a place for constants/enums (HU types, roles, statuses), and a place for report-building utilities on the frontend (export formatting)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/docs/project-structure.md",
+          "operation": "create",
+          "description": "Document the recommended frontend module layout (pages, features, shared components, hooks, API client wrapper around the actor, query keys, shared types, report export utilities) and explicitly list immutable paths that must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui. State that all UI composition must be done outside these files."
+        },
+        {
+          "path": "frontend/src/features/README.md",
+          "operation": "create",
+          "description": "Create a brief index describing feature folders (gatepass, receiving, security, inventory, stocktake, reports, audit) and how each feature exposes pages/components/hooks without touching immutable paths."
+        },
+        {
+          "path": "frontend/src/shared/constants/roles.ts",
+          "operation": "create",
+          "description": "Add shared role/constants aligned to backend AppRole values to drive role-based navigation and guards in the UI."
+        },
+        {
+          "path": "frontend/src/shared/constants/hu.ts",
+          "operation": "create",
+          "description": "Add HU type constants (including explicit flags for which HU types are inventory-tracked: Crates and Shipper Boxes only) to consistently drive UI restrictions (e.g., security confirmation screen)."
+        },
+        {
+          "path": "frontend/src/shared/constants/status.ts",
+          "operation": "create",
+          "description": "Add UI-friendly statuses for Gate Pass and Stock Take flows (for badges, table filters, and consistent wording)."
+        },
+        {
+          "path": "frontend/src/shared/queryKeys.ts",
+          "operation": "create",
+          "description": "Create a centralized place for react-query keys (e.g., currentUserProfile, currentUserRole, selectedLocationContext, lists/reports) to keep caching consistent across modules."
+        },
+        {
+          "path": "frontend/src/shared/types/domain.ts",
+          "operation": "create",
+          "description": "Add frontend domain types for Gate Pass, inventory balances, stock take, exception records, audit events, and report rows (client-side view models) to enable UI development even before full backend capabilities are available."
+        },
+        {
+          "path": "frontend/src/api/actorClient.ts",
+          "operation": "create",
+          "description": "Create a thin wrapper around useActor() that exposes safe, UI-oriented functions for the currently available backend capabilities (user profile + role) and provides typed placeholders for future HU workflow capabilities without breaking compilation. Use the authorization component guidance for handling authorization failures gracefully in the UI; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/utils/exporters.ts",
+          "operation": "create",
+          "description": "Add client-side export utilities to transform structured report data into CSV-compatible rows (and leave extension points for XLSX/PDF generation on the client per non-goals)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Document user stories with given/when/then acceptance criteria for all core workflows and role permissions.",
+      "acceptanceCriteria": [
+        "Each core module has at least 1 user story and includes clear given/when/then style acceptance criteria.",
+        "Stories explicitly cover the business rules: mandatory GP for all HU movements; pending list ordering by ascending GP number; inventory only for Crates/Shipper Boxes; security confirmation mandatory for all DC locations for returned crates/shipper boxes; mismatches generate exception records; GP creation allowed even if OH becomes negative with a required user confirmation step.",
+        "Stories include role-based permissions/visibility expectations (who can create/confirm/view/approve/export).",
+        "Stories include reporting filters (location and date range) and required columns/fields in outputs (as specified in the requirements)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/docs/user-stories.md",
+          "operation": "create",
+          "description": "Write user stories (DEO, Receiver, Security, Inventory Controller, Operations, Admin/LP) with given/when/then acceptance criteria covering GP generation, pending GP visibility and ordering, receipt confirmation HU-type-wise, security confirmation for Crate/Shipper Box only, exception/mismatch reporting, inventory OH + in-transit visibility, stock take submit/approve with variance reasons, shrinkage reporting, reconciliation export, and audit trail completeness. Ensure all user-facing text is in English."
+        },
+        {
+          "path": "frontend/src/pages/UserStories.tsx",
+          "operation": "create",
+          "description": "Add a developer-facing page that renders or links to the user stories markdown for review during UI build-out. Use shadcn-ui components for layout/typography by composing frontend/src/components/ui; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the UserStories and Wireframes developer pages into the app navigation in a non-intrusive way (e.g., behind an admin-only/diagnostics section) while ensuring standard roles still see only their operational modules. Use the authorization guidance to show an AccessDenied screen when unauthorized; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Apply an enterprise warehouse/logistics visual theme across the frontend with consistent forms, tables, badges, and filter panels (no blue/purple primary accents).",
+      "acceptanceCriteria": [
+        "A single visual theme is defined (palette, typography scale, spacing, component styling) and applied consistently across all wireframed screens.",
+        "Tables and status badges have clear visual hierarchy for operational scanning (e.g., pending vs confirmed vs exception).",
+        "Primary colors do not rely on blue/purple as the main brand accents."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Define the app theme using CSS variables/tokens (Tailwind + shadcn tokens) with a warehouse-appropriate palette (e.g., charcoal/graphite neutrals + amber/green/red accents), explicitly avoiding blue/purple as primary accents. Add consistent base styles for typography, page background, and focus states."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Adjust Tailwind theme extensions (if needed) to support the chosen non-blue/purple primary accent tokens and consistent spacing/typography defaults used across forms, tables, and filter panels."
+        },
+        {
+          "path": "frontend/src/components/layout/AppShell.tsx",
+          "operation": "create",
+          "description": "Create a reusable app shell (header + sidebar/top nav + content container) applying the theme consistently across all pages. Use shadcn-ui primitives (e.g., Sheet/Drawer, Separator, ScrollArea) by composing from frontend/src/components/ui; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/StatusBadge.tsx",
+          "operation": "create",
+          "description": "Create a consistent status badge component mapping domain statuses (e.g., Created/PendingReceipt/Received/Closed; StockTake Draft/Submitted/Approved; Exception Open/Resolved) to visual variants for rapid scanning. Compose shadcn-ui Badge from frontend/src/components/ui; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/FilterPanel.tsx",
+          "operation": "create",
+          "description": "Create a standardized filter panel component for reports (location selector, date range, status filters) to be reused across exception, reconciliation, inventory, and audit views. Compose shadcn-ui Form/Popover/Calendar/Select components from frontend/src/components/ui; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/DataTable.tsx",
+          "operation": "create",
+          "description": "Create a reusable table wrapper for operational lists/reports (pending GPs, report rows, audit events) with consistent header styling, empty/loading states, and row actions. Compose shadcn-ui Table components from frontend/src/components/ui; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Adopt the AppShell and standard components so all required screens share consistent layout and styling, including role-based navigation and operational scanning patterns (tables + badges + filter panels). Use existing immutable shadcn-ui components by composition only; verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}

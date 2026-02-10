@@ -1,0 +1,4 @@
+{
+  "frontend/src/App.tsx": "Main application component with inline LoginButton that handles authentication flow, profile setup, and displays a dashboard with user information and role-based access messaging.",
+  "frontend/src/shared/constants/roles.ts": "Role constants and permission mappings aligned with backend AppRole enum, using Partial<Record> to allow flexible permission definitions while maintaining type safety."
+}
